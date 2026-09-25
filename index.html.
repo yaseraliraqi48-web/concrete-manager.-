@@ -3,75 +3,128 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>إدارة الكونكريت والصب</title>
-<link rel="stylesheet" href="style.css">
+
+  <title>نظام إدارة الكونكريت والصب</title>
+
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
   <h1>🏗️ نظام إدارة شركات الكونكريت والصب</h1>
 
-  <h2>لوحة الإدارة</h2>
+  <h2>📊 لوحة الإدارة</h2>
 
   <p>
-    مرحباً بك في نظام إدارة شركة الكونكريت والصب.
+    إدارة الطلبات والحسابات والزبائن وعمليات الصب بسهولة.
   </p>
 
   <hr>
 
-  <h3>📊 الخدمات الرئيسية</h3>
+  <h3>📈 إحصائيات اليوم</h3>
 
   <ul>
-    <li>🧾 إدارة طلبات الصب</li>
-    <li>💰 الحسابات والأموال</li>
-    <li>🚚 الآليات والخلاطات</li>
-    <li>👷 السائقون والرحلات</li>
-    <li>👤 الزبائن</li>
-    <li>📍 مواقع الصب</li>
-    <li>📊 التقارير والأرباح</li>
+    <li>🧾 طلبات الصب: <strong id="ordersCount">0</strong></li>
+
+    <li>🏗️ كمية الكونكريت:
+      <strong id="totalVolume">0</strong> م³
+    </li>
+
+    <li>💰 المقبوضات:
+      <strong id="totalPaid">0</strong> د.ع
+    </li>
+
+    <li>💳 المبالغ المتبقية:
+      <strong id="totalRemaining">0</strong> د.ع
+    </li>
   </ul>
 
   <hr>
 
-  <h3>📌 إحصائيات اليوم</h3>
+  <h3>🧾 إضافة طلب صب جديد</h3>
 
-  <p>طلبات اليوم: <strong>0</strong></p>
-  <p>كمية الكونكريت: <strong>0 م³</strong></p>
-  <p>المقبوضات: <strong>0 د.ع</strong></p>
-  <p>المبالغ المتبقية: <strong>0 د.ع</strong></p>
+  <form id="orderForm">
 
-  <hr>
+    <label>👤 اسم الزبون</label>
+    <input
+      id="customer"
+      type="text"
+      placeholder="أدخل اسم الزبون"
+    >
 
-  <h3>🧾 طلب صب جديد</h3>
+    <br><br>
 
-  <form>
+    <label>📞 رقم الهاتف</label>
+    <input
+      id="phone"
+      type="tel"
+      placeholder="07xxxxxxxxx"
+    >
 
-    <label>اسم الزبون:</label><br>
-    <input type="text" placeholder="اسم الزبون"><br><br>
+    <br><br>
 
-    <label>رقم الهاتف:</label><br>
-    <input type="tel" placeholder="07xxxxxxxxx"><br><br>
+    <label>📍 موقع الصب</label>
+    <input
+      id="location"
+      type="text"
+      placeholder="عنوان موقع المشروع"
+    >
 
-    <label>موقع الصب:</label><br>
-    <input type="text" placeholder="عنوان المشروع"><br><br>
+    <br><br>
 
-    <label>كمية الكونكريت بالمتر المكعب:</label><br>
-    <input type="number" placeholder="مثال: 20"><br><br>
+    <label>🏗️ كمية الكونكريت بالمتر المكعب</label>
+    <input
+      id="volume"
+      type="number"
+      min="1"
+      placeholder="مثال: 20"
+    >
 
-    <label>السعر للمتر:</label><br>
-    <input type="number" placeholder="السعر بالدينار العراقي"><br><br>
+    <br><br>
 
-    <label>المبلغ المدفوع:</label><br>
-    <input type="number" placeholder="المبلغ المدفوع"><br><br>
+    <label>💰 السعر للمتر</label>
+    <input
+      id="price"
+      type="number"
+      min="0"
+      placeholder="مثال: 75000"
+    >
 
-    <label>ملاحظات:</label><br>
-    <textarea placeholder="ملاحظات الطلب"></textarea><br><br>
+    <br><br>
 
-    <button type="button">
+    <label>💵 المبلغ المدفوع</label>
+    <input
+      id="paid"
+      type="number"
+      min="0"
+      placeholder="المبلغ المدفوع"
+    >
+
+    <br><br>
+
+    <label>📝 ملاحظات</label>
+    <textarea
+      id="notes"
+      placeholder="ملاحظات الطلب"
+    ></textarea>
+
+    <br><br>
+
+    <button type="button" onclick="addOrder()">
       💾 حفظ طلب الصب
     </button>
 
   </form>
-<script src="app.js"></script>
+
+  <hr>
+
+  <h3>📋 آخر الطلبات</h3>
+
+  <div id="ordersList">
+    لا توجد طلبات حتى الآن.
+  </div>
+
+  <script src="app.js"></script>
+
 </body>
 </html>
