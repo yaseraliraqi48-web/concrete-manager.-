@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>إدارة الكونكريت والصب</title>
+</head>
+
+<body>
+
+  <h1>🏗️ نظام إدارة شركات الكونكريت والصب</h1>
+
+  <h2>لوحة الإدارة</h2>
+
+  <p>
+    مرحباً بك في نظام إدارة شركة الكونكريت والصب.
+  </p>
+
+  <hr>
+
+  <h3>📊 الخدمات الرئيسية</h3>
+
+  <ul>
+    <li>🧾 إدارة طلبات الصب</li>
+    <li>💰 الحسابات والأموال</li>
+    <li>🚚 الآليات والخلاطات</li>
+    <li>👷 السائقون والرحلات</li>
+    <li>👤 الزبائن</li>
+    <li>📍 مواقع الصب</li>
+    <li>📊 التقارير والأرباح</li>
+  </ul>
+
+  <hr>
+
+  <h3>📌 إحصائيات اليوم</h3>
+
+  <p>طلبات اليوم: <strong>0</strong></p>
+  <p>كمية الكونكريت: <strong>0 م³</strong></p>
+  <p>المقبوضات: <strong>0 د.ع</strong></p>
+  <p>المبالغ المتبقية: <strong>0 د.ع</strong></p>
+
+  <hr>
+
+  <h3>🧾 طلب صب جديد</h3>
+
+  <form>
+
+    <label>اسم الزبون:</label><br>
+    <input type="text" placeholder="اسم الزبون"><br><br>
+
+    <label>رقم الهاتف:</label><br>
+    <input type="tel" placeholder="07xxxxxxxxx"><br><br>
+
+    <label>موقع الصب:</label><br>
+    <input type="text" placeholder="عنوان المشروع"><br><br>
+
+    <label>كمية الكونكريت بالمتر المكعب:</label><br>
+    <input type="number" placeholder="مثال: 20"><br><br>
+
+    <label>السعر للمتر:</label><br>
+    <input type="number" placeholder="السعر بالدينار العراقي"><br><br>
+
+    <label>المبلغ المدفوع:</label><br>
+    <input type="number" placeholder="المبلغ المدفوع"><br><br>
+
+    <label>ملاحظات:</label><br>
+    <textarea placeholder="ملاحظات الطلب"></textarea><br><br>
+
+    <button type="button">
+      💾 حفظ طلب الصب
+    </button>
+
+  </form>
+
+</body>
+</html>
