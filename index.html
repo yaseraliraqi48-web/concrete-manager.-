@@ -1,129 +1,280 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>نظام الكونكريت - اشتراك</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>شركة الخرسانة المهنية - باشتراك</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-<style>@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@700&display=swap');body{font-family:'Tajawal',sans-serif;background:#0f172a}.glass{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1)}</style>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;800&display=swap');
+body{font-family:'Tajawal',sans-serif; background:#0f172a;}
+.glass{background:rgba(255,255,255,0.05); backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,0.1);}
+.finger:active{transform:scale(0.95);}
+</style>
 </head>
 <body class="text-white min-h-screen">
 
-<!-- دخول بالكود -->
-<div id="login" class="min-h-screen flex flex-col items-center justify-center p-6">
-  <div class="w-20 h-20 bg-orange-500 rounded-2xl flex items-center justify-center text-3xl mb-4"><i class="fa-solid fa-truck-pickup"></i></div>
-  <h1 class="text-2xl font-bold">نظام الكونكريت</h1>
-  <p class="text-slate-400 text-xs mt-2 mb-6">اشتراك شهري - دفع إلكتروني</p>
-  <input id="code" placeholder="كود الشركة CONC-XXXXXX" class="w-full max-w-sm bg-slate-800 p-4 rounded-2xl text-center mb-3 tracking-widest">
-  <button onclick="loginCompany()" class="w-full max-w-sm bg-orange-500 p-4 rounded-2xl font-bold">دخول</button>
-  <button onclick="superLogin()" class="mt-6 text-xs text-slate-500">دخول المالك 👑</button>
+<!-- 1- شاشة الاشتراك -->
+<div id="companyLoginScreen" class="min-h-screen flex flex-col items-center justify-center p-6">
+  <div class="w-20 h-20 bg-orange-500 rounded-2xl mx-auto flex items-center justify-center text-3xl mb-4"><i class="fa-solid fa-truck-pickup"></i></div>
+  <h1 class="text-2xl font-extrabold">نظام الكونكريت</h1>
+  <p class="text-slate-400 mt-2 text-sm">اشتراك شهري - دفع إلكتروني</p>
+  <div class="w-full max-w-sm mt-8">
+    <input id="companyCodeInput" placeholder="كود الشركة CONC-XXXXXX" class="w-full bg-slate-800 p-4 rounded-2xl text-center tracking-widest mb-3">
+    <button onclick="checkCompanySubscription()" class="w-full bg-orange-500 p-4 rounded-2xl font-bold">تفعيل ودخول</button>
+    <button onclick="openSuperAdmin()" class="w-full glass p-3 rounded-xl text-xs mt-6">دخول المالك Super Admin 👑 - كلمة سر: admin123</button>
+  </div>
 </div>
 
-<!-- شاشة القفل عند انتهاء الاشتراك -->
-<div id="locked" class="hidden min-h-screen flex flex-col items-center justify-center p-6 text-center bg-black">
+<!-- 2- شاشة القفل عند انتهاء الاشتراك -->
+<div id="lockedScreen" class="hidden min-h-screen flex flex-col items-center justify-center p-6 text-center bg-black">
   <div class="w-24 h-24 bg-red-600 rounded-full flex items-center justify-center text-4xl mb-6"><i class="fa-solid fa-lock"></i></div>
   <h1 class="text-3xl font-bold text-red-500">التطبيق متوقف</h1>
   <p class="text-slate-300 mt-3">انتهت مدة اشتراك شركتكم</p>
-  <p id="lockedCompany" class="font-bold mt-1"></p>
-  <p id="lockedDate" class="text-xs text-slate-500 mt-1"></p>
+  <p id="lockedCompanyName" class="font-bold mt-1"></p>
+  <p id="lockedExpiryDate" class="text-xs text-slate-500 mt-1"></p>
   <div class="glass p-5 rounded-2xl mt-8 w-full max-w-sm border border-red-500/30">
-    <h3 class="font-bold mb-3">جدد اشتراكك للمتابعة</h3>
-    <div class="grid grid-cols-1 gap-2 text-sm">
-      <button onclick="payElectronic(49,30)" class="bg-green-600 p-3 rounded-xl font-bold">دفع $49 - تجديد 30 يوم 💳</button>
-      <button onclick="payElectronic(129,90)" class="bg-blue-600 p-3 rounded-xl font-bold">دفع $129 - تجديد 90 يوم 🔥</button>
-      <button onclick="payElectronic(499,365)" class="bg-orange-500 p-3 rounded-xl font-bold">دفع $499 - تجديد سنة كاملة 👑</button>
-    </div>
-    <p class="text-[10px] text-slate-500 mt-3">الدفع الإلكتروني: بطاقة / زين كاش / Qi / MasterCard<br>التفعيل فوري تلقائياً بعد الدفع</p>
+    <h3 class="font-bold mb-3">جدد اشتراكك للمتابعة - الدفع الإلكتروني</h3>
+    <button onclick="payElectronic(49,30)" class="w-full bg-green-600 p-3 rounded-xl font-bold mb-2">دفع $49 - 30 يوم 💳</button>
+    <button onclick="payElectronic(129,90)" class="w-full bg-blue-600 p-3 rounded-xl font-bold mb-2">دفع $129 - 90 يوم 🔥</button>
+    <button onclick="payElectronic(499,365)" class="w-full bg-orange-500 p-3 rounded-xl font-bold">دفع $499 - سنة 👑</button>
+    <p class="text-[10px] text-slate-500 mt-3">التفعيل فوري تلقائي بعد الدفع</p>
   </div>
   <div id="payStatus" class="mt-4 text-sm"></div>
+  <button onclick="location.reload()" class="mt-6 text-xs text-slate-500">رجوع</button>
 </div>
 
-<!-- Super Admin -->
-<div id="super" class="hidden p-4">
-  <h2 class="font-bold text-xl mb-4">👑 لوحة المالك - المبيعات</h2>
-  <div class="glass p-4 rounded-2xl mb-4">
-    <input id="cName" placeholder="اسم الشركة الجديدة" class="w-full bg-slate-800 p-3 rounded-xl mb-2 text-sm">
-    <input id="cPhone" placeholder="واتساب الشركة" class="w-full bg-slate-800 p-3 rounded-xl mb-2 text-sm">
-    <button onclick="createCompany()" class="w-full bg-green-600 p-3 rounded-xl font-bold">إنشاء كود + تفعيل 30 يوم مجانا للتجربة</button>
+<!-- 3- لوحة Super Admin -->
+<div id="superAdminScreen" class="hidden min-h-screen p-4">
+  <h2 class="text-xl font-bold mb-4">👑 لوحة المالك - إدارة الاشتراكات</h2>
+  <div class="glass p-4 rounded-2xl mb-4 border border-orange-500/30">
+    <h3 class="font-bold mb-2 text-orange-400">إنشاء شركة جديدة</h3>
+    <input id="newCompName" placeholder="اسم الشركة" class="w-full bg-slate-800 p-3 rounded-xl mb-2 text-sm">
+    <input id="newCompPhone" placeholder="واتساب الشركة" class="w-full bg-slate-800 p-3 rounded-xl mb-2 text-sm">
+    <button onclick="createNewCompany()" class="w-full bg-green-600 p-3 rounded-xl font-bold">إنشاء كود وتفعيل 30 يوم مجاناً</button>
   </div>
-  <div id="comps"></div>
+  <div id="companiesList"></div>
   <button onclick="location.reload()" class="w-full glass mt-4 p-3 rounded-xl">خروج</button>
 </div>
 
-<!-- التطبيق الكامل - كل المميزات السابقة -->
-<div id="app" class="hidden p-4">
-  <div class="flex justify-between items-center mb-4">
-    <div><h2 id="compName" class="font-bold"></h2><p id="expInfo" class="text-xs text-green-400"></p></div>
-    <button onclick="location.reload()" class="bg-red-600 px-3 py-2 rounded-xl text-xs">خروج</button>
+<!-- 4- كودك الأصلي كما هو بدون أي حذف -->
+<div id="loginScreen" class="hidden min-h-screen flex flex-col items-center justify-center p-6">
+  <div class="text-center mb-10">
+    <div class="w-20 h-20 bg-orange-500 rounded-2xl mx-auto flex items-center justify-center text-3xl mb-4"><i class="fa-solid fa-truck-pickup"></i></div>
+    <h1 class="text-3xl font-extrabold">شركة الخرسانة المهنية</h1>
+    <p class="text-slate-400 mt-2">نظام إدارة الصب المتكامل</p>
+    <p id="activeCompanyInfo" class="text-xs text-green-400 mt-2"></p>
   </div>
-  <div class="grid grid-cols-3 gap-2 mb-4">
-    <div class="glass p-3 rounded-xl text-center"><p class="text-[10px] text-slate-400">الصادرات</p><p id="eT" class="font-bold text-green-400 text-sm">0</p></div>
-    <div class="glass p-3 rounded-xl text-center"><p class="text-[10px] text-slate-400">الواردات</p><p id="iT" class="font-bold text-red-400 text-sm">0</p></div>
-    <div class="glass p-3 rounded-xl text-center"><p class="text-[10px] text-slate-400">الصافي</p><p id="nT" class="font-bold text-sm">0</p></div>
+  <div class="w-full max-w-sm space-y-4">
+    <button onclick="login('manager')" class="w-full glass p-5 rounded-2xl flex items-center gap-4 hover:bg-white/10 transition"><div class="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center"><i class="fa-solid fa-user-tie"></i></div><div class="text-right"><h3 class="font-bold">دخول المدير</h3><p class="text-xs text-slate-400">الصادرات والواردات والفلوس</p></div></button>
+    <button onclick="login('driver')" class="w-full glass p-5 rounded-2xl flex items-center gap-4 hover:bg-white/10 transition"><div class="w-12 h-12 bg-orange-500 rounded-xl flex items-center justify-center"><i class="fa-solid fa-id-card"></i></div><div class="text-right"><h3 class="font-bold">دخول السائق</h3><p class="text-xs text-slate-400">البصمة والوصولات والراتب</p></div></button>
+    <button onclick="login('customer')" class="w-full glass p-5 rounded-2xl flex items-center gap-4 hover:bg-white/10 transition"><div class="w-12 h-12 bg-green-600 rounded-xl flex items-center justify-center"><i class="fa-solid fa-user"></i></div><div class="text-right"><h3 class="font-bold">دخول الزبون</h3><p class="text-xs text-slate-400">طلب صبة ومتابعة</p></div></button>
+    <button onclick="location.reload()" class="w-full text-xs text-slate-500 mt-4">تبديل الشركة - خروج</button>
+  </div>
+</div>
+
+<div id="managerPanel" class="hidden min-h-screen p-4">
+  <header class="flex justify-between items-center mb-6"><h2 class="text-xl font-bold">لوحة المدير</h2><button onclick="logoutToRoles()" class="bg-red-600 px-4 py-2 rounded-xl text-sm">خروج</button></header>
+  <div class="grid grid-cols-3 gap-3 mb-6">
+    <div class="glass p-4 rounded-2xl text-center"><p class="text-xs text-slate-400">إجمالي الصادرات</p><p id="totalExports" class="text-lg font-bold text-green-400">0 د.ع</p></div>
+    <div class="glass p-4 rounded-2xl text-center"><p class="text-xs text-slate-400">إجمالي الواردات</p><p id="totalImports" class="text-lg font-bold text-red-400">0 د.ع</p></div>
+    <div class="glass p-4 rounded-2xl text-center"><p class="text-xs text-slate-400">صافي الربح</p><p id="netProfit" class="text-lg font-bold text-blue-400">0 د.ع</p></div>
   </div>
   <div class="flex gap-2 mb-4 overflow-auto">
-    <button onclick="aTab('orders')" class="aTab bg-orange-500 px-3 py-2 rounded-xl text-xs">الطلبات</button>
-    <button onclick="aTab('prices')" class="aTab glass px-3 py-2 rounded-xl text-xs">الأسعار ⚙️</button>
-    <button onclick="aTab('drivers')" class="aTab glass px-3 py-2 rounded-xl text-xs">السواق + البصمة + الوصولات</button>
-    <button onclick="aTab('imports')" class="aTab glass px-3 py-2 rounded-xl text-xs">الواردات</button>
-    <button onclick="aTab('exports')" class="aTab glass px-3 py-2 rounded-xl text-xs">الصادرات</button>
-    <button onclick="aTab('money')" class="aTab glass px-3 py-2 rounded-xl text-xs">الفلوس</button>
+    <button onclick="mTab('orders')" class="mTabBtn bg-orange-500 px-4 py-2 rounded-xl text-sm">الطلبات</button>
+    <button onclick="mTab('imports')" class="mTabBtn glass px-4 py-2 rounded-xl text-sm">الواردات</button>
+    <button onclick="mTab('exports')" class="mTabBtn glass px-4 py-2 rounded-xl text-sm">الصادرات</button>
+    <button onclick="mTab('drivers')" class="mTabBtn glass px-4 py-2 rounded-xl text-sm">السواق</button>
+    <button onclick="mTab('money')" class="mTabBtn glass px-4 py-2 rounded-xl text-sm">الفلوس</button>
   </div>
-  <div id="a_orders" class="aSec"><div class="glass p-4 rounded-2xl mb-3"><input id="oC" placeholder="اسم الزبون" class="w-full bg-slate-800 p-3 rounded-xl mb-2 text-sm"><div class="grid grid-cols-2 gap-2 mb-2"><input id="oQ" type="number" placeholder="م3" class="bg-slate-800 p-3 rounded-xl text-sm"><select id="oT" class="bg-slate-800 p-3 rounded-xl text-sm"></select></div><select id="oD" class="w-full bg-slate-800 p-3 rounded-xl mb-2 text-sm"></select><input id="oL" placeholder="الموقع" class="w-full bg-slate-800 p-3 rounded-xl mb-3 text-sm"><button onclick="addO()" class="w-full bg-orange-500 p-3 rounded-xl font-bold">إضافة + بصمة استلام</button></div><div id="oL"></div></div>
-  <div id="a_prices" class="aSec hidden"><div id="pE"></div><button onclick="saveP()" class="w-full bg-green-600 mt-2 p-3 rounded-xl">حفظ الأسعار</button></div>
-  <div id="a_drivers" class="aSec hidden"><div class="flex gap-2 mb-3"><input id="dN" placeholder="اسم السائق" class="flex-1 bg-slate-800 p-3 rounded-xl text-sm"><input id="dC" placeholder="رقم السيارة" class="flex-1 bg-slate-800 p-3 rounded-xl text-sm"></div><button onclick="addD()" class="w-full bg-blue-600 p-3 rounded-xl mb-3">إضافة سائق</button><div class="glass p-4 rounded-2xl text-center mb-3"><div onclick="doFP()" class="w-16 h-16 bg-orange-500 rounded-full mx-auto flex items-center justify-center cursor-pointer"><i class="fa-solid fa-fingerprint"></i></div><p id="fpS" class="text-xs mt-2">بصمة حضور</p></div><div id="dL"></div><div class="glass p-3 rounded-xl mt-3"><p class="font-bold text-xs">محفظة وصولاتي + الراتب</p><div id="wL" class="mt-2"></div><p id="sal" class="font-bold text-sm mt-2"></p></div></div>
-  <div id="a_imports" class="aSec hidden"><div class="grid grid-cols-2 gap-2 mb-2"><input id="imI" placeholder="المادة" class="bg-slate-800 p-3 rounded-xl text-sm"><input id="imC" type="number" placeholder="الكلفة" class="bg-slate-800 p-3 rounded-xl text-sm"></div><button onclick="addIm()" class="w-full bg-blue-600 p-3 rounded-xl mb-3">حفظ وارد</button><div id="imL"></div></div>
-  <div id="a_exports" class="aSec hidden"><div id="exL"></div></div>
-  <div id="a_money" class="aSec hidden"><div id="moL"></div></div>
+  <div id="m_orders" class="mSection">
+    <div class="glass p-4 rounded-2xl mb-4">
+      <h3 class="font-bold mb-3">إضافة طلب جديد للسائق</h3>
+      <input id="orderCustomer" placeholder="اسم الزبون" class="w-full bg-slate-800 p-3 rounded-xl mb-2 text-sm">
+      <div class="grid grid-cols-2 gap-2 mb-2"><input id="orderQty" type="number" placeholder="الكمية م3" class="bg-slate-800 p-3 rounded-xl text-sm"><select id="orderType" class="bg-slate-800 p-3 rounded-xl text-sm"><option>C25 - 75,000</option><option>C30 - 85,000</option><option>C35 - 95,000</option></select></div>
+      <input id="orderLocation" placeholder="الموقع" class="w-full bg-slate-800 p-3 rounded-xl mb-3 text-sm">
+      <button onclick="addOrder()" class="w-full bg-orange-500 p-3 rounded-xl font-bold">إضافة وتوزيع على السائق</button>
+    </div>
+    <div id="ordersList"></div>
+  </div>
+  <div id="m_imports" class="mSection hidden">
+    <div class="glass p-4 rounded-2xl mb-4"><h3 class="font-bold mb-3">إضافة وارد</h3><div class="grid grid-cols-2 gap-2"><input id="impItem" placeholder="المادة (سمنت، حصى...)" class="bg-slate-800 p-3 rounded-xl text-sm"><input id="impCost" type="number" placeholder="الكلفة" class="bg-slate-800 p-3 rounded-xl text-sm"></div><button onclick="addImport()" class="w-full bg-blue-600 mt-2 p-3 rounded-xl font-bold">حفظ وارد</button></div><div id="importsList"></div>
+  </div>
+  <div id="m_exports" class="mSection hidden"><div id="exportsList"></div></div>
+  <div id="m_drivers" class="mSection hidden"><div id="driversListManager"></div></div>
+  <div id="m_money" class="mSection hidden"><div id="moneyList"></div></div>
+</div>
+
+<div id="driverPanel" class="hidden min-h-screen p-4">
+  <header class="flex justify-between items-center mb-6"><h2 class="text-xl font-bold">أهلاً، سائق <span id="driverName">أحمد</span></h2><button onclick="logoutToRoles()" class="bg-red-600 px-4 py-2 rounded-xl text-sm">خروج</button></header>
+  <div class="glass p-6 rounded-[2rem] text-center mb-6">
+    <p class="text-sm text-slate-400 mb-3">بصمة الحضور اليومية</p>
+    <div id="fingerBtn" onclick="doFingerprint('حضور')" class="finger w-24 h-24 bg-gradient-to-b from-orange-400 to-orange-600 rounded-full mx-auto flex items-center justify-center text-3xl shadow-xl cursor-pointer transition"><i class="fa-solid fa-fingerprint"></i></div>
+    <p id="attendanceStatus" class="mt-3 text-sm font-bold text-orange-400">لم تبصم بعد</p>
+    <p id="attendanceTime" class="text-xs text-slate-400"></p>
+  </div>
+  <div class="flex gap-2 mb-4"><button onclick="dTab('new')" class="dTabBtn bg-orange-500 px-4 py-2 rounded-xl text-sm">طلبات جديدة</button><button onclick="dTab('wallet')" class="dTabBtn glass px-4 py-2 rounded-xl text-sm">محفظة وصولاتي</button><button onclick="dTab('salary')" class="dTabBtn glass px-4 py-2 rounded-xl text-sm">الراتب</button></div>
+  <div id="d_new" class="dSection"><div id="driverOrders"></div></div>
+  <div id="d_wallet" class="dSection hidden"><div id="driverWallet"></div></div>
+  <div id="d_salary" class="dSection hidden">
+    <div class="glass p-5 rounded-2xl"><h3 class="font-bold mb-2">راتب نهاية الشهر</h3><p class="text-sm text-slate-400">مجموع الوصولات: <span id="salaryCount" class="font-bold text-white">0</span></p><p class="text-sm text-slate-400">مجموع الأمتار: <span id="salaryMeters" class="font-bold text-white">0 م3</span></p><p class="text-lg mt-2">المستحق: <span id="salaryTotal" class="font-extrabold text-green-400">0 د.ع</span></p><button onclick="printSalary()" class="w-full mt-4 bg-slate-700 p-3 rounded-xl text-sm">طباعة كشف الوصولات PDF</button></div>
+    <div id="salaryDetails" class="mt-4"></div>
+  </div>
+</div>
+
+<div id="customerPanel" class="hidden min-h-screen p-4">
+  <header class="flex justify-between items-center mb-6"><h2 class="text-xl font-bold">طلباتي</h2><button onclick="logoutToRoles()" class="bg-red-600 px-4 py-2 rounded-xl text-sm">خروج</button></header>
+  <div class="glass p-4 rounded-2xl mb-6"><h3 class="font-bold mb-3">طلب صبة جديدة</h3><select id="cType" class="w-full bg-slate-800 p-3 rounded-xl mb-2 text-sm"><option>C25 - 75,000 د.ع/م3</option><option>C30 - 85,000 د.ع/م3</option><option>C35 - 95,000 د.ع/م3</option></select><input id="cQty" type="number" placeholder="كم متر تحتاج؟" class="w-full bg-slate-800 p-3 rounded-xl mb-2 text-sm"><input id="cLoc" placeholder="موقع الصب" class="w-full bg-slate-800 p-3 rounded-xl mb-3 text-sm"><button onclick="customerOrder()" class="w-full bg-green-600 p-3 rounded-xl font-bold">إرسال الطلب</button></div><div id="customerOrdersList"></div>
 </div>
 
 <script>
-let saas=JSON.parse(localStorage.getItem('saas3')||'{"companies":[]}');
-let db=JSON.parse(localStorage.getItem('concreteFinal')||'{"orders":[],"imports":[],"exports":[],"prices":[{"name":"C20","price":65000},{"name":"C25","price":75000},{"name":"C30","price":85000},{"name":"C35","price":95000}],"drivers":[],"attendance":[],"receipts":[]}');
-let active=null;
-function save(){localStorage.setItem('concreteFinal',JSON.stringify(db)); localStorage.setItem('saas3',JSON.stringify(saas))}
-function loginCompany(){
-  let code=document.getElementById('code').value.trim(); let c=saas.companies.find(x=>x.code===code);
-  if(!c)return alert('كود خاطئ');
-  active=c;
-  let now=new Date(), exp=new Date(c.expiry);
+// --- نظام الاشتراك ---
+let saasDB = JSON.parse(localStorage.getItem('saasDB_final')||'{"companies":[]}');
+let activeCompany = null;
+function saveSaas(){localStorage.setItem('saasDB_final',JSON.stringify(saasDB))}
+function checkCompanySubscription(){
+  let code=document.getElementById('companyCodeInput').value.trim();
+  let comp=saasDB.companies.find(c=>c.code===code);
+  if(!comp) return alert('كود غير صحيح');
+  let now=new Date(), exp=new Date(comp.expiry);
   if(now>exp){
-    // قفل التطبيق
-    document.getElementById('login').classList.add('hidden');
-    document.getElementById('locked').classList.remove('hidden');
-    document.getElementById('lockedCompany').innerText=c.name;
-    document.getElementById('lockedDate').innerText='انتهى في: '+exp.toLocaleDateString();
+    activeCompany=comp;
+    document.getElementById('companyLoginScreen').classList.add('hidden');
+    document.getElementById('lockedScreen').classList.remove('hidden');
+    document.getElementById('lockedCompanyName').innerText=comp.name;
+    document.getElementById('lockedExpiryDate').innerText='انتهى في: '+exp.toLocaleDateString();
     return;
   }
-  document.getElementById('login').classList.add('hidden');
-  document.getElementById('app').classList.remove('hidden');
-  document.getElementById('compName').innerText=c.name;
-  document.getElementById('expInfo').innerText='مفعل حتى '+exp.toLocaleDateString()+' - باقي '+Math.ceil((exp-now)/86400000)+' يوم';
-  render();
+  activeCompany=comp;
+  document.getElementById('companyLoginScreen').classList.add('hidden');
+  document.getElementById('loginScreen').classList.remove('hidden');
+  document.getElementById('activeCompanyInfo').innerText=comp.name+' - فعال حتى '+exp.toLocaleDateString()+' - باقي '+Math.ceil((exp-now)/86400000)+' يوم';
 }
 function payElectronic(amount,days){
-  document.getElementById('payStatus').innerHTML='<p class="text-yellow-400">جاري تحويلك لبوابة الدفع الإلكتروني... 💳</p>';
+  document.getElementById('payStatus').innerHTML='جاري تحويلك لبوابة الدفع 💳 $'+amount;
   setTimeout(()=>{
-    document.getElementById('payStatus').innerHTML='<p class="text-blue-400">تم الدفع بنجاح $'+amount+' ✅<br>جاري تفعيل الاشتراك...</p>';
+    document.getElementById('payStatus').innerHTML='تم الدفع بنجاح ✅ جاري التفعيل...';
     setTimeout(()=>{
-      let exp=new Date(active.expiry); let now=new Date();
-      if(exp<now)exp=now;
-      exp.setDate(exp.getDate()+days); active.expiry=exp.toISOString(); save();
-      alert('تم تجديد الاشتراك بنجاح ✅\nمفعل حتى: '+exp.toLocaleDateString());
+      let ex=new Date(activeCompany.expiry); let now=new Date(); if(ex<now) ex=now;
+      ex.setDate(ex.getDate()+days); activeCompany.expiry=ex.toISOString(); saveSaas();
+      alert('تم التجديد بنجاح حتى '+ex.toLocaleDateString());
       location.reload();
-    },1500);
-  },1500);
+    },1200);
+  },1200);
 }
-function superLogin(){let p=prompt('كلمة سر المالك: admin123'); if(p!=='admin123')return; document.getElementById('login').classList.add('hidden'); document.getElementById('super').classList.remove('hidden'); renderSuper()}
-function createCompany(){let n=document.getElementById('cName').value, ph=document.getElementById('cPhone').value; if(!n)return; let code='CONC-'+Math.random().toString(36).substr(2,6).toUpperCase(); let ex=new Date(); ex.setDate(ex.getDate()+14); saas.companies.push({id:Date.now(),name:n,phone:ph,code:code,expiry:ex.toISOString(),created:new Date().toLocaleString('ar-EG')}); save(); renderSuper(); alert('كود الشركة: '+code+' - فعال 14 يوم مجانا');}
-function renderSuper(){document.getElementById('comps').innerHTML=saas.companies.map(c=>{let ex=new Date(c.expiry), left=Math.ceil((ex-new Date())/86400000); return `<div class="glass p-3 rounded-xl mb-2 flex justify-between ${left<=0?'border border-red-500':''}"><div><b>${c.name}</b><p class="text-xs text-slate-400">كود: ${c.code} | ${c.phone}</p><p class="text-xs ${left<=0?'text-red-400':'text-green-400'}">${left<=0?'منتهي':'باقي '+left+' يوم'} - ينتهي ${ex.toLocaleDateString()}</p></div><button onclick="saas.companies=saas.companies.filter(x=>x.id!==${c.id});save();renderSuper()" class="bg-red-600 px-3 py-1 rounded text-xs h-fit">حذف</button></div>`}).join('')}
-function aTab(t){document.querySelectorAll('.aSec').forEach(s=>s.classList.add('hidden')); document.getElementById('a_'+t).classList.remove('hidden')}
-function render(){let ex=db.exports.reduce((s,x)=>s+x.total,0), im=db.imports.reduce((s,x)=>s+x.cost,0); document.getElementById('eT').innerText=ex.toLocaleString(); document.getElementById('iT').innerText=im.toLocaleString(); document.getElementById('nT').innerText=(ex-im).toLocaleString(); document.getElementById('oT').innerHTML=db.prices.map(p=>`<option value="${p.name}|${p.price}">${p.name} - ${p.price.toLocaleString()}</option>`).join(''); document.getElementById('oD').innerHTML=db.drivers.map(d=>`<option>${d.name}</option>`).join('')||'<option>أضف سائق</option>'; document.getElementById('pE').innerHTML=db.prices.map((p,i)=>`<div class="flex gap-2 mb-2"><span class="w-10">${p.name}</span><input id="pr_${i}" value="${p.price}" class="flex-1 bg-slate-800 p-2 rounded-xl text-sm"><button onclick="db.prices.splice(${i},1);save();render()" class="bg-red-600 px-2 rounded">X</button></div>`).join(''); document.getElementById('oL').innerHTML=db.orders.map(o=>`<div class="glass p-3 rounded-xl mb-2"><b>${o.customer}</b><p class="text-xs text-slate-400">${o.qty}م3 ${o.type} - ${o.driver}</p><p class="text-xs">${o.price.toLocaleString()} - ${o.fp||'لم يبصم'}</p><button onclick="let oo=db.orders.find(x=>x.id===${o.id});oo.fp=new Date().toLocaleString('ar-EG');db.receipts.unshift(oo);save();render()" class="w-full bg-orange-500 mt-2 p-2 rounded-xl text-xs">بصمة استلام + جمع مع الراتب</button></div>`).join(''); document.getElementById('dL').innerHTML=db.drivers.map((d,i)=>`<div class="glass p-2 rounded-xl mb-1 flex justify-between"><span>${d.name} - ${d.car}</span><button onclick="db.drivers.splice(${i},1);save();render()" class="bg-red-600 px-2 rounded text-xs">حذف</button></div>`).join(''); document.getElementById('imL').innerHTML=db.imports.map(x=>`<div class="glass p-2 rounded-xl mb-1 flex justify-between"><span>${x.item}</span><span class="text-red-400">${x.cost.toLocaleString()}</span></div>`).join(''); document.getElementById('exL').innerHTML=db.exports.map(x=>`<div class="glass p-2 rounded-xl mb-1 flex justify-between"><span>${x.customer}</span><span class="text-green-400">${x.total.toLocaleString()}</span></div>`).join(''); document.getElementById('moL').innerHTML=`<div class="glass p-4 rounded-xl">داخل: ${ex.toLocaleString()}<br>خارج: ${im.toLocaleString()}<br><b>الصافي: ${(ex-im).toLocaleString()}</b></div>`; document.getElementById('wL').innerHTML=db.receipts.map(r=>`<div class="flex justify-between text-xs mb-1"><span>#${r.id.toString().slice(-4)} ${r.customer} ${r.qty}م3</span><span>${r.price.toLocaleString()}</span></div>`).join(''); let tm=db.receipts.reduce((s,r)=>s+r.qty,0); document.getElementById('sal').innerText='الوصولات: '+db.receipts.length+' - الأمتار: '+tm+' - الراتب: '+(tm*2000+750000).toLocaleString();}
-function saveP(){db.prices.forEach((p,i)=>{p.price=parseInt(document.getElementById('pr_'+i).value)||p.price}); save(); render()}
-function addD(){let n=document.getElementById('dN').value, c=document.getElementById('dC').value; if(!n)return; db.drivers.push({name:n,car:c}); save(); render(); document.getElementById('dN').value=''; document.getElementById('dC').value=''}
-function addO(){let c=document.getElementById('oC').value, q=parseFloat(document.getElementById('oQ').value)||0, ty=document.getElementById('oT').value, dr=document.getElementById('oD').value, lo=document.getElementById('oL').value; if(!c||!q)return; let [tn,tp]=ty.split('|'); let pr=q*parseInt(tp); db.orders.unshift({id:Date.now(),customer:c,qty:q,type:tn,driver:dr,location:lo,price:pr,fp:''}); db.exports.unshift({id:Date.now(),customer:c,qty:q,total:pr}); save(); render()}
-function addIm(){let i=document.getElementById('imI').value, co=parseInt(document.getElementById('imC').value)||0; if(!i||!co)return; db.imports.unshift({item:i,cost:co}); save(); render()}
-function doFP(){db.attendance.push({time:new Date().toLocaleString('ar-EG')}); save(); document.getElementById('fpS').innerText='تمت البصمة ✅ '+new Date().toLocaleTimeString('ar-EG')}
+function openSuperAdmin(){
+  let p=prompt('كلمة سر المالك:'); if(p!=='admin123') return alert('خطأ');
+  document.getElementById('companyLoginScreen').classList.add('hidden');
+  document.getElementById('superAdminScreen').classList.remove('hidden');
+  renderCompanies();
+}
+function createNewCompany(){
+  let n=document.getElementById('newCompName').value, ph=document.getElementById('newCompPhone').value;
+  if(!n) return alert('اكتب اسم الشركة');
+  let code='CONC-'+Math.random().toString(36).substr(2,6).toUpperCase();
+  let ex=new Date(); ex.setDate(ex.getDate()+30);
+  saasDB.companies.push({id:Date.now(),name:n,phone:ph,code:code,expiry:ex.toISOString(),created:new Date().toLocaleString('ar-EG')});
+  saveSaas(); renderCompanies(); alert('كود الشركة: '+code+'\nانسخه وارسله للشركة - فعال 30 يوم');
+}
+function renderCompanies(){
+  document.getElementById('companiesList').innerHTML=saasDB.companies.map(c=>{
+    let ex=new Date(c.expiry), left=Math.ceil((ex-new Date())/86400000);
+    return `<div class="glass p-3 rounded-xl mb-2 flex justify-between ${left<=0?'border border-red-500':''}"><div><b>${c.name}</b><p class="text-xs text-slate-400">كود: ${c.code} | ${c.phone}</p><p class="text-xs ${left<=0?'text-red-400':'text-green-400'}">${left<=0?'منتهي':'باقي '+left+' يوم'} - ${ex.toLocaleDateString()}</p></div><button onclick="saasDB.companies=saasDB.companies.filter(x=>x.id!==${c.id});saveSaas();renderCompanies()" class="bg-red-600 px-3 py-1 rounded text-xs h-fit">حذف</button></div>`;
+  }).join('')||'<p class="text-xs text-slate-500 text-center">لا شركات بعد</p>';
+}
+function logoutToRoles(){
+  document.getElementById('managerPanel').classList.add('hidden');
+  document.getElementById('driverPanel').classList.add('hidden');
+  document.getElementById('customerPanel').classList.add('hidden');
+  document.getElementById('loginScreen').classList.remove('hidden');
+}
+
+// --- كودك الأصلي كما هو ---
+let db = JSON.parse(localStorage.getItem('concreteDB')||'{"orders":[],"imports":[],"exports":[],"attendance":[],"drivers":[{"name":"أحمد السائق","id":1},{"name":"علي السائق","id":2}]}');
+function save(){localStorage.setItem('concreteDB',JSON.stringify(db))}
+let currentDriver = db.drivers[0];
+let currentDriverReceipts = JSON.parse(localStorage.getItem('driverReceipts')||'[]');
+function login(role){
+  document.getElementById('loginScreen').classList.add('hidden');
+  if(role==='manager'){document.getElementById('managerPanel').classList.remove('hidden'); renderManager();}
+  if(role==='driver'){document.getElementById('driverPanel').classList.remove('hidden'); document.getElementById('driverName').innerText=currentDriver.name; renderDriver();}
+  if(role==='customer'){document.getElementById('customerPanel').classList.remove('hidden'); renderCustomer();}
+}
+function mTab(t){
+  document.querySelectorAll('.mSection').forEach(e=>e.classList.add('hidden'));
+  document.getElementById('m_'+t).classList.remove('hidden');
+  document.querySelectorAll('.mTabBtn').forEach(b=>b.classList.remove('bg-orange-500'));
+  event.target.classList.add('bg-orange-500');
+  renderManager();
+}
+function dTab(t){
+  document.querySelectorAll('.dSection').forEach(e=>e.classList.add('hidden'));
+  document.getElementById('d_'+t).classList.remove('hidden');
+  document.querySelectorAll('.dTabBtn').forEach(b=>b.classList.remove('bg-orange-500'));
+  event.target.classList.add('bg-orange-500');
+  renderDriver();
+}
+function addOrder(){
+  let c=document.getElementById('orderCustomer').value, q=parseFloat(document.getElementById('orderQty').value)||0, ty=document.getElementById('orderType').value, loc=document.getElementById('orderLocation').value;
+  if(!c||!q)return alert('اكمل البيانات');
+  let price = ty.includes('C25')?75000:ty.includes('C30')?85000:95000;
+  let order={id:Date.now(), customer:c, qty:q, type:ty, location:loc, price:price*q, status:'جديد', driver:currentDriver.name, date:new Date().toLocaleString('ar-EG')};
+  db.orders.unshift(order); db.exports.unshift({id:order.id, customer:c, qty:q, total:price*q, date:order.date}); save(); renderManager();
+  document.getElementById('orderCustomer').value=''; document.getElementById('orderQty').value=''; document.getElementById('orderLocation').value='';
+}
+function addImport(){
+  let item=document.getElementById('impItem').value, cost=parseFloat(document.getElementById('impCost').value)||0;
+  if(!item||!cost)return;
+  db.imports.unshift({id:Date.now(), item:item, cost:cost, date:new Date().toLocaleString('ar-EG')}); save(); renderManager();
+}
+function renderManager(){
+  let expTotal = db.exports.reduce((s,x)=>s+x.total,0); let impTotal = db.imports.reduce((s,x)=>s+x.cost,0);
+  document.getElementById('totalExports').innerText=expTotal.toLocaleString()+' د.ع';
+  document.getElementById('totalImports').innerText=impTotal.toLocaleString()+' د.ع';
+  document.getElementById('netProfit').innerText=(expTotal-impTotal).toLocaleString()+' د.ع';
+  document.getElementById('ordersList').innerHTML=db.orders.map(o=>`<div class="glass p-4 rounded-2xl mb-2"><div class="flex justify-between"><b>${o.customer}</b><span class="text-xs bg-orange-500 px-2 py-1 rounded-full">${o.status}</span></div><p class="text-xs text-slate-400 mt-1">${o.qty} م3 - ${o.type} - ${o.location}</p><p class="text-xs mt-1">${o.price.toLocaleString()} د.ع - السائق: ${o.driver}</p></div>`).join('');
+  document.getElementById('importsList').innerHTML=db.imports.map(i=>`<div class="glass p-3 rounded-xl mb-2 flex justify-between"><span>${i.item}</span><span class="text-red-400">${i.cost.toLocaleString()}</span></div>`).join('');
+  document.getElementById('exportsList').innerHTML=db.exports.map(e=>`<div class="glass p-3 rounded-xl mb-2 flex justify-between"><span>${e.customer} - ${e.qty} م3</span><span class="text-green-400">${e.total.toLocaleString()}</span></div>`).join('');
+  document.getElementById('driversListManager').innerHTML=db.drivers.map(d=>`<div class="glass p-4 rounded-xl mb-2"><b>${d.name}</b><p class="text-xs text-slate-400">الوصولات: ${currentDriverReceipts.filter(r=>r.driver===d.name).length}</p></div>`).join('');
+  document.getElementById('moneyList').innerHTML=`<div class="glass p-4 rounded-xl"><p>إجمالي داخل: ${expTotal.toLocaleString()}</p><p>إجمالي خارج: ${impTotal.toLocaleString()}</p><p class="font-bold mt-2">الصافي: ${(expTotal-impTotal).toLocaleString()} د.ع</p></div>`;
+}
+function doFingerprint(type){
+  let now=new Date();
+  let entry={type:type, time:now.toLocaleTimeString('ar-EG'), date:now.toLocaleDateString('ar-EG'), full:now.toLocaleString('ar-EG')};
+  db.attendance.push(entry); save();
+  document.getElementById('attendanceStatus').innerText=`تم تسجيل بصمة ${type} بنجاح ✅`;
+  document.getElementById('attendanceTime').innerText=entry.full;
+  document.getElementById('fingerBtn').classList.add('from-green-400','to-green-600');
+  setTimeout(()=>document.getElementById('fingerBtn').classList.remove('from-green-400','to-green-600'),1000);
+}
+function renderDriver(){
+  let newOrders=db.orders.filter(o=>o.status==='جديد');
+  document.getElementById('driverOrders').innerHTML=newOrders.length?newOrders.map(o=>`<div class="glass p-4 rounded-2xl mb-3"><b>${o.customer}</b><p class="text-xs text-slate-400">${o.qty} م3 - ${o.location}</p><button onclick="receiveOrder(${o.id})" class="w-full mt-3 bg-orange-500 p-3 rounded-xl font-bold"><i class="fa-solid fa-fingerprint ml-2"></i>بصمة استلام الوصل #${o.id.toString().slice(-4)}</button></div>`).join(''):'<p class="text-center text-slate-500 text-sm">لا توجد طلبات جديدة</p>';
+  document.getElementById('driverWallet').innerHTML=currentDriverReceipts.length?currentDriverReceipts.map(r=>`<div class="glass p-4 rounded-xl mb-2 flex justify-between"><div><b>وصل #${r.id.toString().slice(-4)}</b><p class="text-xs text-slate-400">${r.customer} - ${r.qty} م3</p><p class="text-xs text-slate-500">${r.date}</p></div><span class="text-green-400 font-bold">${r.price.toLocaleString()}</span></div>`).join(''):'<p class="text-center text-slate-500 text-sm">المحفظة فارغة</p>';
+  let totalM=currentDriverReceipts.reduce((s,r)=>s+r.qty,0); let count=currentDriverReceipts.length;
+  document.getElementById('salaryCount').innerText=count; document.getElementById('salaryMeters').innerText=totalM+' م3';
+  document.getElementById('salaryTotal').innerText=(totalM*2000+750000).toLocaleString()+' د.ع';
+  document.getElementById('salaryDetails').innerHTML=currentDriverReceipts.map(r=>`<div class="glass p-3 rounded-xl mb-2 text-xs flex justify-between"><span>#${r.id.toString().slice(-4)} - ${r.customer}</span><span>${r.qty} م3</span></div>`).join('');
+  let att=db.attendance.slice(-1)[0]; if(att){document.getElementById('attendanceStatus').innerText=`آخر بصمة: ${att.type} - ${att.time}`; document.getElementById('attendanceTime').innerText=att.full;}
+}
+function receiveOrder(id){
+  let order=db.orders.find(o=>o.id===id); if(!order)return;
+  let ok=confirm('تأكيد بصمة استلام الوصل #' + id.toString().slice(-4) + '؟\nضع إصبعك على القارئ');
+  if(!ok)return;
+  order.status='تم الاستلام'; order.receivedAt=new Date().toLocaleString('ar-EG');
+  let receipt={id:order.id, customer:order.customer, qty:order.qty, price:order.price, date:order.receivedAt, driver:order.driver};
+  currentDriverReceipts.unshift(receipt); localStorage.setItem('driverReceipts',JSON.stringify(currentDriverReceipts)); save(); renderDriver();
+}
+function printSalary(){ let w=window.open('','','width=600'); w.document.write('<html dir=rtl><body><h2>كشف وصولات السائق - '+currentDriver.name+'</h2>'+document.getElementById('salaryDetails').innerHTML+'</body></html>'); w.print(); }
+function customerOrder(){
+  let ty=document.getElementById('cType').value, q=parseFloat(document.getElementById('cQty').value)||0, loc=document.getElementById('cLoc').value;
+  if(!q||!loc)return alert('اكمل البيانات');
+  let price=ty.includes('C25')?75000:ty.includes('C30')?85000:95000;
+  let o={id:Date.now(), customer:'زبون', qty:q, type:ty, location:loc, price:price*q, status:'بانتظار الموافقة', driver:'لم يحدد', date:new Date().toLocaleString('ar-EG')};
+  db.orders.unshift(o); save(); renderCustomer(); alert('تم إرسال طلبك ✅');
+}
+function renderCustomer(){ document.getElementById('customerOrdersList').innerHTML=db.orders.slice(0,10).map(o=>`<div class="glass p-4 rounded-xl mb-2"><b>${o.type} - ${o.qty} م3</b><p class="text-xs text-slate-400">${o.location}</p><span class="text-xs bg-blue-600 px-2 py-1 rounded-full">${o.status}</span></div>`).join('');}
 </script>
 </body>
 </html>
